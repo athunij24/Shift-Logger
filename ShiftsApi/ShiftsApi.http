@@ -1,0 +1,8 @@
+@ShiftsApi_HostAddress = http://localhost:5115
+
+GET {{ShiftsApi_HostAddress}}/shifts/
+Accept: application/json
+
+###
+GET {{ShiftsApi_HostAddress}}/employees
+Accept: application/json

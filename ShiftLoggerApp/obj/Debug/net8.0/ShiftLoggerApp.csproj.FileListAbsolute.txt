@@ -1,0 +1,17 @@
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\ShiftLoggerApp.exe
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\ShiftLoggerApp.deps.json
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\ShiftLoggerApp.runtimeconfig.json
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\ShiftLoggerApp.dll
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\ShiftLoggerApp.pdb
+C:\Users\athar\source\repos\ShiftLoggerApp\bin\Debug\net8.0\Spectre.Console.dll
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.csproj.AssemblyReference.cache
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.AssemblyInfoInputs.cache
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.AssemblyInfo.cs
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.csproj.CoreCompileInputs.cache
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLog.79596276.Up2Date
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.dll
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\refint\ShiftLoggerApp.dll
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.pdb
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ShiftLoggerApp.genruntimeconfig.cache
+C:\Users\athar\source\repos\ShiftLoggerApp\obj\Debug\net8.0\ref\ShiftLoggerApp.dll
