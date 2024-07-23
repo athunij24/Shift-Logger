@@ -92,6 +92,42 @@ namespace ShiftsApi.Controllers
             return NoContent();
         }
 
+
+        // POST: api/Employees/register
+        [HttpPost("register")]
+        public async Task<ActionResult<Employee>> RegisterEmployee(Employee employee)
+        {
+            if (await _context.Employees.AnyAsync(e => e.UserName == employee.UserName))
+            {
+                return Conflict(new { message = "Username is already in use." });
+            }
+
+            _context.Employees.Add(employee);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, employee);
+        }
+
+        // Get: api/Employees/login
+        [HttpPost("login")]
+        public async Task<ActionResult<Employee>> LoginEmployee(Employee employee)
+        {
+            var existingEmployee = await _context.Employees
+                .SingleOrDefaultAsync(e => e.UserName == employee.UserName);
+
+            if (existingEmployee == null)
+            {
+                return NotFound(new { message = "Username not found." });
+            }
+
+            if (existingEmployee.Password != employee.Password)
+            {
+                return Conflict(new { message = "Incorrect password." });
+            }
+
+            return Ok(existingEmployee);
+        }
+
         private bool EmployeeExists(long id)
         {
             return _context.Employees.Any(e => e.Id == id);

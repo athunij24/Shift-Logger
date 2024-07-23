@@ -4,5 +4,5 @@ GET {{ShiftsApi_HostAddress}}/shifts/
 Accept: application/json
 
 ###
-GET {{ShiftsApi_HostAddress}}/employees
+GET {{ShiftsApi_HostAddress}}/employees/
 Accept: application/json

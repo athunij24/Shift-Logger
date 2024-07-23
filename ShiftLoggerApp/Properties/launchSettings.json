@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ShiftLoggerApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ApiEmployeesUrl": "http://localhost:5115/api/Employees/"
+      }
+    }
+  }
+}
