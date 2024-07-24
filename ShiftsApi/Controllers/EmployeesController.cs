@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShiftsApi.Models;
+using ShiftsApi.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShiftsApi.Controllers
 {
@@ -8,129 +11,87 @@ namespace ShiftsApi.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly ShiftDbContext _context;
+        private readonly EmployeeService _employeeService;
 
-        public EmployeesController(ShiftDbContext context)
+        public EmployeesController(EmployeeService employeeService)
         {
-            _context = context;
+            _employeeService = employeeService;
         }
 
         // GET: api/Employees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
-            return await _context.Employees.ToListAsync();
+            var employees = await _employeeService.GetEmployeesAsync();
+            return Ok(employees); // Return 200 OK with the list of employees
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(long id)
         {
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = await _employeeService.GetEmployeeAsync(id);
 
             if (employee == null)
             {
                 return NotFound(new { message = $"Employee with ID {id} not found." });
             }
 
-            return employee;
+            return Ok(employee);
         }
 
-        // PUT: api/Employee/5
+        // PUT: api/Employees/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmployee(long id, Employee employee)
         {
-            if (id != employee.Id)
+            bool success = await _employeeService.UpdateEmployeeAsync(id, employee);
+            if (!success)
             {
-                return BadRequest(new { message = "Employee ID mismatch." });
+                return BadRequest(new { message = "Invalid employee ID or mismatch with provided data." });
             }
 
-            _context.Entry(employee).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(id))
-                {
-                    return NotFound(new { message = $"Employee with ID {id} does not exist." });
-                }
-                else
-                {
-                    throw; 
-                }
-            }
-
-            return NoContent();
+            return NoContent(); // Return 204 No Content if update was successful
         }
 
-        // POST: api/Employee
+        // POST: api/Employees
         [HttpPost]
         public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
         {
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, employee);
+            try
+            {
+                var newEmployee = await _employeeService.RegisterAsync(employee);
+                return CreatedAtAction(nameof(GetEmployee), new { id = newEmployee.Id }, newEmployee);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
 
-        // DELETE: api/Employee/5
+        // DELETE: api/Employees/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(long id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            bool success = await _employeeService.DeleteEmployeeAsync(id);
+            if (!success)
             {
                 return NotFound(new { message = $"Employee with ID {id} not found." });
             }
 
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return NoContent(); // Return 204 No Content if deletion was successful
         }
 
-
-        // POST: api/Employees/register
-        [HttpPost("register")]
-        public async Task<ActionResult<Employee>> RegisterEmployee(Employee employee)
-        {
-            if (await _context.Employees.AnyAsync(e => e.UserName == employee.UserName))
-            {
-                return Conflict(new { message = "Username is already in use." });
-            }
-
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, employee);
-        }
-
-        // Get: api/Employees/login
+        // POST: api/Employees/login
         [HttpPost("login")]
-        public async Task<ActionResult<Employee>> LoginEmployee(Employee employee)
+        public async Task<ActionResult<Employee>> LoginEmployee(string userName, string password)
         {
-            var existingEmployee = await _context.Employees
-                .SingleOrDefaultAsync(e => e.UserName == employee.UserName);
-
-            if (existingEmployee == null)
+            var employee = await _employeeService.LoginAsync(userName, password);
+            if (employee == null)
             {
-                return NotFound(new { message = "Username not found." });
+                return Unauthorized(new { message = "Invalid username or password." });
             }
 
-            if (existingEmployee.Password != employee.Password)
-            {
-                return Conflict(new { message = "Incorrect password." });
-            }
-
-            return Ok(existingEmployee);
-        }
-
-        private bool EmployeeExists(long id)
-        {
-            return _context.Employees.Any(e => e.Id == id);
+            return Ok(employee);
         }
     }
 }

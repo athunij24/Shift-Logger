@@ -17,7 +17,11 @@ namespace ShiftsApi.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Shift>().HasOne(e => e.Employee).WithMany(e => e.Shifts).HasForeignKey(e => e.EmployeeId);
+            modelBuilder.Entity<Shift>()
+            .HasOne<Employee>() 
+            .WithMany() 
+            .HasForeignKey(s => s.EmployeeId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

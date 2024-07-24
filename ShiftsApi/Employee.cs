@@ -12,6 +12,5 @@ namespace ShiftsApi.Models
 
 		public string Role { get; set; }
 
-		public ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 	}
 }

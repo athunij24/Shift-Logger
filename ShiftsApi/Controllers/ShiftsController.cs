@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShiftsApi.Models;
+using ShiftsApi.Services;
 
 namespace ShiftsApi.Controllers
 {
@@ -8,25 +9,25 @@ namespace ShiftsApi.Controllers
     [ApiController]
     public class ShiftsController : ControllerBase
     {
-        private readonly ShiftDbContext _context;
+        private readonly ShiftService _shiftService;
 
-        public ShiftsController(ShiftDbContext context)
+        public ShiftsController(ShiftService service)
         {
-            _context = context;
+            _shiftService = service;
         }
 
         // GET: api/Shifts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Shift>>> GetShifts()
         {
-            return await _context.Shifts.ToListAsync();
+            return await _shiftService.GetShiftsAsync();
         }
 
         // GET: api/Shifts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Shift>> GetShift(long id)
         {
-            var shift = await _context.Shifts.FindAsync(id);
+            var shift = await _shiftService.GetShiftAsync(id);
 
             if (shift == null)
             {
@@ -40,66 +41,43 @@ namespace ShiftsApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShift(long id, Shift shift)
         {
-            if (id != shift.Id)
+            bool success = await _shiftService.UpdateShiftAsync(id, shift);
+            if (!success)
             {
-                return BadRequest(new { message = "Shift ID mismatch." });
+                return BadRequest(new { message = "Invalid employee ID or mismatch with provided data." });
             }
 
-            _context.Entry(shift).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ShiftExists(id))
-                {
-                    return NotFound(new { message = $"Shift with ID {id} does not exist." });
-                }
-                else
-                {
-                    throw; // Will be caught by the middleware
-                }
-            }
-
-            return NoContent();
+            return NoContent(); // Return 204 No Content if update was successful
         }
 
         // POST: api/Shifts
         [HttpPost]
         public async Task<ActionResult<Shift>> PostShift(Shift shift)
         {
-            if (shift.StartTime >= shift.EndTime)
+            try
             {
-                return BadRequest(new { message = "Shift start time must be before end time." });
+                var newShift = await _shiftService.PostShiftAsync(shift);
+                return CreatedAtAction(nameof(GetShift), new { id = newShift.Id }, newShift);
             }
-
-            _context.Shifts.Add(shift);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetShift), new { id = shift.Id }, shift);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
 
         // DELETE: api/Shifts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShift(long id)
         {
-            var shift = await _context.Shifts.FindAsync(id);
-            if (shift == null)
+            bool success = await _shiftService.DeleteShiftAsync(id);
+            if (!success)
             {
                 return NotFound(new { message = $"Shift with ID {id} not found." });
             }
 
-            _context.Shifts.Remove(shift);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return NoContent(); // Return 204 No Content if deletion was successful
         }
 
-        private bool ShiftExists(long id)
-        {
-            return _context.Shifts.Any(e => e.Id == id);
-        }
+        
     }
 }
