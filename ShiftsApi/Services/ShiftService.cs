@@ -54,7 +54,7 @@ namespace ShiftsApi.Services
         {
             await _context.Shifts.AddAsync(shift);
             await _context.SaveChangesAsync();
-            
+
             return shift;
 
         }

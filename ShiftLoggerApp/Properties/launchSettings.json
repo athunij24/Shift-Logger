@@ -3,7 +3,8 @@
     "ShiftLoggerApp": {
       "commandName": "Project",
       "environmentVariables": {
-        "ApiEmployeesUrl": "http://localhost:5115/api/Employees/"
+        "ApiEmployeesUrl": "http://localhost:5115/api/Employees/",
+        "ApiShiftsUrl": "http://localhost:5115/api/Shifts/"
       }
     }
   }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShiftsApi.Models;
 using ShiftsApi.Services;
 
@@ -44,7 +43,7 @@ namespace ShiftsApi.Controllers
             bool success = await _shiftService.UpdateShiftAsync(id, shift);
             if (!success)
             {
-                return BadRequest(new { message = "Invalid employee ID or mismatch with provided data." });
+                return BadRequest(new { message = "Invalid shift ID or mismatch with provided data." });
             }
 
             return NoContent(); // Return 204 No Content if update was successful
@@ -78,6 +77,6 @@ namespace ShiftsApi.Controllers
             return NoContent(); // Return 204 No Content if deletion was successful
         }
 
-        
+
     }
 }

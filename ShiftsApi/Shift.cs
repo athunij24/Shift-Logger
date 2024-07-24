@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-
-namespace ShiftsApi.Models
+﻿namespace ShiftsApi.Models
 {
     public class Shift
     {

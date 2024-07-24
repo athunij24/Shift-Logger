@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShiftsApi.Models;
 using ShiftsApi.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ShiftsApi.Controllers
 {
@@ -83,9 +80,9 @@ namespace ShiftsApi.Controllers
 
         // POST: api/Employees/login
         [HttpPost("login")]
-        public async Task<ActionResult<Employee>> LoginEmployee(string userName, string password)
+        public async Task<ActionResult<Employee>> LoginEmployee([FromBody] ShiftsApi.Models.LoginRequest loginRequest)
         {
-            var employee = await _employeeService.LoginAsync(userName, password);
+            var employee = await _employeeService.LoginAsync(loginRequest.Username, loginRequest.Password);
             if (employee == null)
             {
                 return Unauthorized(new { message = "Invalid username or password." });

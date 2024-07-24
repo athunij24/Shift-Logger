@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ShiftsApi.Models
 {
@@ -18,8 +17,8 @@ namespace ShiftsApi.Models
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Shift>()
-            .HasOne<Employee>() 
-            .WithMany() 
+            .HasOne<Employee>()
+            .WithMany()
             .HasForeignKey(s => s.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
         }
