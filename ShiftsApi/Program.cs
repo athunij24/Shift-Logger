@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShiftsApi.Data;
 using ShiftsApi.Models;
 using ShiftsApi.Services;
 
@@ -8,8 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ShiftDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<EmployeeService>();
-builder.Services.AddScoped<ShiftService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,82 +1,64 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShiftsApi.Models;
 using ShiftsApi.Services;
+using ShiftsApi.Models;
 
 namespace ShiftsApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ShiftsController : ControllerBase
     {
-        private readonly ShiftService _shiftService;
+        private readonly IShiftService _shiftService;
 
-        public ShiftsController(ShiftService service)
+        public ShiftsController(IShiftService shiftService)
         {
-            _shiftService = service;
+            _shiftService = shiftService;
         }
 
         // GET: api/Shifts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Shift>>> GetShifts()
         {
-            return await _shiftService.GetShiftsAsync();
+            var shifts = await _shiftService.GetShiftsAsync();
+            return Ok(shifts);
         }
 
-        // GET: api/Shifts/5
+        // GET: api/Shifts/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Shift>> GetShift(long id)
         {
             var shift = await _shiftService.GetShiftAsync(id);
-
-            if (shift == null)
-            {
-                return NotFound(new { message = $"Shift with ID {id} not found." });
-            }
-
             return shift;
         }
 
-        // PUT: api/Shifts/5
+        // PUT: api/Shifts/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShift(long id, Shift shift)
         {
-            bool success = await _shiftService.UpdateShiftAsync(id, shift);
-            if (!success)
+            if (await _shiftService.UpdateShiftAsync(id, shift))
             {
-                return BadRequest(new { message = "Invalid shift ID or mismatch with provided data." });
+                return NoContent();
             }
-
-            return NoContent(); // Return 204 No Content if update was successful
+            return BadRequest();
         }
 
         // POST: api/Shifts
         [HttpPost]
         public async Task<ActionResult<Shift>> PostShift(Shift shift)
         {
-            try
-            {
-                var newShift = await _shiftService.PostShiftAsync(shift);
-                return CreatedAtAction(nameof(GetShift), new { id = newShift.Id }, newShift);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
+            var newShift = await _shiftService.PostShiftAsync(shift);
+            return CreatedAtAction(nameof(GetShift), new { id = newShift.Id }, newShift);
         }
 
-        // DELETE: api/Shifts/5
+        // DELETE: api/Shifts/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShift(long id)
         {
-            bool success = await _shiftService.DeleteShiftAsync(id);
-            if (!success)
+            if (await _shiftService.DeleteShiftAsync(id))
             {
-                return NotFound(new { message = $"Shift with ID {id} not found." });
+                return NoContent();
             }
-
-            return NoContent(); // Return 204 No Content if deletion was successful
+            return NotFound();
         }
-
-
     }
 }
