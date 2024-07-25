@@ -53,7 +53,8 @@ namespace ShiftLoggerApp
                         }));
                     Employee e = new Employee { Name = name, UserName = userName, Password = password, Role = role };
                     await employeeManager.RegisterEmployeeAsync(e);
-                    await Task.Delay(7000);
+                    Console.WriteLine("Registration in progress...");
+                    await Task.Delay(5000);
                     AnsiConsole.Clear();
                     choice = loginPrompt();
 
@@ -69,7 +70,8 @@ namespace ShiftLoggerApp
                     }
                 }
             }
-            await Task.Delay(7000);
+            AnsiConsole.WriteLine("Logging in...");
+            await Task.Delay(2000);
             AnsiConsole.Clear();
             string action = promptEmployee(currEmployee.Name);
             while (action != "Quit")
