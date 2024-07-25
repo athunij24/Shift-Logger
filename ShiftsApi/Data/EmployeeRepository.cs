@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShiftsApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ShiftsApi.Data
 {
@@ -11,9 +9,9 @@ namespace ShiftsApi.Data
         Task<Employee> GetEmployeeByIdAsync(long id);
         Task<Employee> GetEmployeeByUserNameAsync(string userName);
         Task<List<Employee>> GetAllEmployeesAsync();
-        void AddEmployee(Employee employee);  
-        void UpdateEmployee(Employee employee); 
-        void DeleteEmployee(Employee employee); 
+        void AddEmployee(Employee employee);
+        void UpdateEmployee(Employee employee);
+        void DeleteEmployee(Employee employee);
         Task<bool> SaveChangesAsync();
     }
 

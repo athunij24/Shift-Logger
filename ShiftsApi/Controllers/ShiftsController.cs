@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShiftsApi.Services;
 using ShiftsApi.Models;
+using ShiftsApi.Services;
 
 namespace ShiftsApi.Controllers
 {

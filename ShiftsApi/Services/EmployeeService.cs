@@ -1,7 +1,5 @@
-﻿using ShiftsApi.Models;
-using ShiftsApi.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using ShiftsApi.Data;
+using ShiftsApi.Models;
 
 namespace ShiftsApi.Services
 {

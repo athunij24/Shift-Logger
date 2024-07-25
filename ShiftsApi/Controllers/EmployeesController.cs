@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShiftsApi.Models;
 using ShiftsApi.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ShiftsApi.Controllers
 {
@@ -34,9 +32,9 @@ namespace ShiftsApi.Controllers
 
         // POST: api/Employees/Login
         [HttpPost("login")]
-        public async Task<ActionResult<Employee>> Login(string userName, string password)
+        public async Task<ActionResult<Employee>> Login(LoginRequest loginRequest)
         {
-            var employee = await _employeeService.LoginAsync(userName, password);
+            var employee = await _employeeService.LoginAsync(loginRequest.Username, loginRequest.Password);
 
             if (employee == null)
             {
